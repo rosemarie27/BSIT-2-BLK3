@@ -1,0 +1,56 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package Ghost_stack;  
+ 
+import java.util.Stack;
+
+
+public class Ghost_stack {  
+    public static void main(String[] args) {  
+        
+         Stack<String> animals = new Stack<>();  
+         Stack<String> insects = new Stack<>();  
+         
+         animals.push("Elephant");  
+         animals.push("Penguin"); // Corrected spelling of "Penguin"  
+         animals.push("Crocodile");  
+         
+         System.out.println("Animals stack: "+animals);  
+         
+         insects.push("beetels");
+         insects.push("Mosquito");
+         insects.push("Flys");
+         
+         System.out.println("insects stack: "+insects);  
+         
+         System.out.println("Top element of animal stack: "+animals.peek());  
+         System.out.println("Top element of insect stack: "+insects.peek());  
+         
+         System.out.println("is the animal stack empty?: "+animals.empty()); 
+         System.out.println("is the animal stack empty?: "+insects.empty());
+         
+         int maxSize = 5;
+         System.out.println("is the insects size full?: "+(animals.size() == maxSize));
+         
+         System.out.println("is the insects size full?: " +(insects.size() == maxSize));
+         
+         animals.push("dog");
+         animals.push("cat");
+         
+         System.out.println("Animals stack: "+animals);
+         
+         int animalPosition = animals.search("Penguin");
+         System.out.println("The position of Penguin in animals:"+animalPosition);
+         
+         int insectsPosition = insects.search("beetles");
+         System.out.println("The position of beetles in insects:"+insectsPosition);
+         
+         insects.pop();
+         insects.pop();
+         System.out.println(insects);
+    }  
+}
