@@ -1,0 +1,55 @@
+package ghost_stack;
+
+import java.util.Stack;
+
+/**
+ *
+ * @author BLK3
+ */
+public class Stack_activity {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        
+         Stack<String> cars = new Stack<>();  
+         Stack<String> motors = new Stack<>(); 
+         
+         int maxSize = 6;
+         System.out.println("is the cars size full?: "+(cars.size() == maxSize));
+         
+         cars.push("BMW");
+         cars.push("Chevorlet");
+         
+         System.out.println("is the cars size full?: "+(cars.size() == maxSize));
+         
+         int carsPosition = cars.search("BMW");
+         System.out.println("The position of BMW in cars:"+carsPosition);
+         
+         int carsPosition1 = cars.search("Chevorlet");
+         System.out.println("The position of Chevorlet in cars:"+carsPosition1);
+         
+         cars.push("Camaro");
+         cars.push("Lambo");
+         cars.push("Bughatti");
+         cars.push("Ferrari");
+         
+         System.out.println("Top element of animal stack: "+cars.peek());
+         
+         cars.pop();
+         cars.pop();
+         cars.pop();
+         cars.pop();
+         cars.pop();
+         cars.pop();
+         
+         System.out.println(cars);
+         
+         System.out.println("is the cars size full?: "+cars);
+         
+         
+         
+    }
+    
+}
