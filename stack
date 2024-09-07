@@ -1,0 +1,67 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+package ghost_stack;
+
+import java.util.Stack;
+
+/**
+ *
+ * @author BLK3
+ */
+public class Stack_activity {
+
+    /**
+     * @param args the command line arguments
+     */
+    public static void main(String[] args) {
+        int maxSize = 6;
+         
+         //simulate if stack is full//
+        
+         Stack<String> Browser_history = new Stack<>();   
+         
+         System.out.println("is the stack full?: "+(Browser_history.size() == maxSize));
+         
+         //push two elements//
+         Browser_history.push("BMW");
+         Browser_history.push("Chevorlet");
+         
+         //simulate if stack is full//
+         System.out.println("is the stack full?: "+(Browser_history.size() == maxSize));
+         
+         //search for all existing elements//
+         Browser_history.search(Browser_history );
+         System.out.println("name: "+Browser_history );
+         
+         
+         //push another 4 elements in stack//
+         Browser_history.push("Camaro");
+         Browser_history.push("Lambo");
+         Browser_history.push("Bughatti");
+         Browser_history.push("Ferrari");
+         
+         //peek//
+         System.out.println("Top element of stack: "+Browser_history .peek());
+         
+         //pop six elements//
+         Browser_history.pop();
+         Browser_history.pop();
+         Browser_history.pop();
+         Browser_history.pop();
+         Browser_history.pop();
+         Browser_history.pop();
+         
+         //check if the stack has an element//
+         System.out.println("Check is the stack has an element: "+Browser_history .size());
+         
+         
+         
+         
+         
+    }
+    
+}
