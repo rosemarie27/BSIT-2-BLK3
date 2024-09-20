@@ -1,0 +1,33 @@
+//1
+         Queue<String> customerQueue = new LinkedList<>();  
+         
+         //2
+         customerQueue.offer("Ava");
+         customerQueue.offer("Ben");
+         customerQueue.offer("Nicole");
+         
+         //3
+         System.out.println("Customers waiting in line: "+customerQueue);
+         System.out.println("Number of Customers waiting in line: "+customerQueue.size());
+         
+         //4
+         System.out.println("Next customer in line: "+customerQueue.peek());
+         
+         //5
+         customerQueue.poll();
+         System.out.println("Served customer: "+customerQueue.peek());
+         
+         //6
+         System.out.println("Updated customer queue state: "+customerQueue);
+         System.out.println("Number of Customers waiting in line: "+customerQueue.size());
+         
+         //7
+         System.out.println("Determine if the queue is empty: "+customerQueue.isEmpty());
+         
+         //8
+         customerQueue.offer("Bong");
+         customerQueue.offer("Jay");
+         
+         //9
+         System.out.println("Number of Customers waiting in line: "+customerQueue);
+         System.out.println("Number of Customers waiting in line: "+customerQueue.size());
