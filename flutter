@@ -1,39 +1,15 @@
-import 'package:flutter/material.dart';
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: Text('Material Design App'),
-        ),
-        body: Center(
-          child: ElevatedButton(
-            onPressed: () {
-              // Button action
-            },
-            child: Text('Press Me'),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-
 class BasicWidgetsHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Basic Widgets Home'), // Provide a title here
+        title: Text('Basic Widgets Home'),
       ),
-      body: Column(                    // Use body to place the Column widget
+      body: Column(
         children: [
-          Text('Mac'),
-          Text('Tressia'),// Correct usage of a Text widget
-          // You can add more Widgets here
+          Icon(Icons.abc_outlined),
+          Icon(Icons.access_alarm_outlined),
+
         ],
       ),
     );
