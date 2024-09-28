@@ -26,11 +26,16 @@ class BasicWidgetsHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: BasicWidgetsHome(),
-       appBar: AppBar(
-        title: Text('Mac'),
-       ),
-
+      appBar: AppBar(
+        title: Text('Basic Widgets Home'), // Provide a title here
+      ),
+      body: Column(                    // Use body to place the Column widget
+        children: [
+          Text('Mac'),
+          Text('Tressia'),// Correct usage of a Text widget
+          // You can add more Widgets here
+        ],
+      ),
     );
   }
 }
