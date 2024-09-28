@@ -36,15 +36,16 @@ public class Atess_Queue {
          System.out.println("Next customer in line: "+customerQueue.peek());
          
          //5 serve the next customer in line
+         System.out.println("Served: "+customerQueue.peek());
          customerQueue.poll();
-         System.out.println("Served customer: "+customerQueue.peek());
+         System.out.println("Ava");
          
          //6 display the updated queue state and the remaining number of customers 
          System.out.println("Updated customer queue state: "+customerQueue);
          System.out.println("Number of Customers waiting in line: "+customerQueue.size());
          
          //7 if the queue is empty
-         System.out.println("Determine if the queue is empty: "+customerQueue.isEmpty());
+         System.out.println(customerQueue.isEmpty()? "The queue is full" : "The queue is not empty");
          
          //8 add new customer
          customerQueue.offer("Bong");
@@ -55,4 +56,4 @@ public class Atess_Queue {
          System.out.println("Remaining number of customers: "+customerQueue.size());
     }
     
-}
+} 
