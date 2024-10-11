@@ -11,29 +11,38 @@ class labExam extends StatelessWidget {
 }
 
 
+
 class LabExamHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text.('Lab Examination'),
+        toolbarHeight: 80.0, // Optional: change the height if needed
+        flexibleSpace: Center(
+          child: Text(
+            'Lab Examination',
+            style: TextStyle(
+              fontSize: 20, // You can adjust the font size
+              fontWeight: FontWeight.bold, // You can adjust the font weight
+            ),
+          ),
+        ),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            // Use ClipOval to make the image round
-            ClipOval(
-              child: Image.network(
-                'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQqGK3diR3Zi-mnOXEaj-3ewmFyRYVxGzVzZw&s', // Replace with your image URL
-                width: 100, // Set the width of the round image
-                height: 100, // Set the height of the round image
-                fit: BoxFit.cover, // Adjust the fit
+        child: Card(
+          color: Colors.red,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              CircleAvatar(
+                radius: 50,
+                backgroundImage: NetworkImage('https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg'), // Load your network image here
               ),
-            ),
-            SizedBox(height: 20), // Add some space between the image and text
-            Text('Welcome to Lab Examination'),
-          ],
+              SizedBox(height: 20), // Space between the image and text
+              Text('Masa John Phillip D.'),
+              Text('Bachelor of Science in information Technology'),
+            ],
+          ),
         ),
       ),
     );
