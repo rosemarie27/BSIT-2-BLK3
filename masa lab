@@ -10,38 +10,64 @@ class labExam extends StatelessWidget {
   }
 }
 
-
-
 class LabExamHome extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         toolbarHeight: 80.0, // Optional: change the height if needed
+        backgroundColor: Colors.lightBlue, // Set the AppBar background color
         flexibleSpace: Center(
           child: Text(
             'Lab Examination',
             style: TextStyle(
-              fontSize: 20, // You can adjust the font size
-              fontWeight: FontWeight.bold, // You can adjust the font weight
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.white, // Use white color for better contrast
             ),
           ),
         ),
       ),
       body: Center(
         child: Card(
-          color: Colors.red,
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              CircleAvatar(
-                radius: 50,
-                backgroundImage: NetworkImage('https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg'), // Load your network image here
-              ),
-              SizedBox(height: 20), // Space between the image and text
-              Text('Masa John Phillip D.'),
-              Text('Bachelor of Science in information Technology'),
-            ],
+          color: Colors.tealAccent,
+          child: Padding(
+            padding: const EdgeInsets.all(16.0), // Padding around the content
+            child: Column(
+              mainAxisSize: MainAxisSize.min, // Prevents the card from expanding
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage(
+                    'https://letsenhance.io/static/8f5e523ee6b2479e26ecc91b9c25261e/1015f/MainAfter.jpg',
+                  ), // Load your network image here
+                ),
+                SizedBox(height: 20), // Space between the image and text
+                Text('Mac Lovell Keith D. Ates'),
+                Text('Bachelor of Science in Information Technology') ,
+                SizedBox(height: 20), // Space between the text and buttons
+                Wrap(
+                  spacing: 8.0, // Space between buttons
+                  alignment: WrapAlignment.center, // Center align buttons
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        // Add your button action here
+                        print('Add me');
+                      },
+                      child: Text('Add'), // Text for the first button
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        // Add your button action here
+                        print('Follow me');
+                      },
+                      child: Text('Follow'), // Text for the second button
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
