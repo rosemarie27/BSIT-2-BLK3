@@ -1,0 +1,152 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:flutter/material.dart';
+import 'package:timbolrm_b3/dashboard.dart';
+import 'package:timbolrm_b3/databse_helper.dart';
+import 'package:timbolrm_b3/globals.dart';
+import 'package:timbolrm_b3/signupscreen.dart';
+
+class LoginScreen extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+     return MaterialApp(
+       debugShowCheckedModeBanner: false,
+       home: LoginScreenHome(),
+     );
+  }
+}
+
+class LoginScreenHome extends StatefulWidget{
+
+  @override
+  State<LoginScreenHome> createState() => _LoginScreenHomeState();
+}
+
+class _LoginScreenHomeState extends State<LoginScreenHome> {
+  var _emailController = TextEditingController();
+
+  var _passwordController = TextEditingController();
+
+  void _login()async{
+    var email = _emailController.text.trim();
+    var password = _emailController.text.trim();
+
+    if(email.isEmpty || password.isEmpty){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please provide input in all fields'))
+      );
+    }else{
+      int? userId = await DatabaseHelper.instance.userLogin(email, password);
+      if(userId != null){
+        setUserId(userId);
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context)=>Dashboard()));
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Login Failed, please try again!'))
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login Screen'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+        children: [
+          Text('Welcome users', style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20, color: Colors.pinkAccent),),
+          SizedBox(height: 20,),
+          Text('Please login to continue'),
+          SizedBox(height: 20,),
+          SizedBox(
+            height: MediaQuery.of(context).size.height*0.65,
+            width: MediaQuery.of(context).size.width*0.3,
+            child: Card(
+              elevation: 20,
+              child: Padding(
+                padding: const EdgeInsets.all(5.0),
+                child: Column(
+                  children: [
+                    Container(
+                padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                  border: Border.all(
+                    width: 2,
+                    color: Colors.pinkAccent
+                  )
+                ),
+                child: CircleAvatar(
+                  backgroundImage: NetworkImage('https://media.gettyimages.com/id/2166943469/photo/taylor-swift-the-eras-tour-london-uk.jpg?s=612x612&w=0&k=20&c=5iP6vdCqMxR1LPKoxGzS6IjhDtWfG1uz8mUuxBXJHtk='),
+                  radius: 50,
+                ),
+                ),
+                    SizedBox(height: 50,),
+                    TextField(
+                      controller: _emailController,
+                      decoration: InputDecoration(
+                        labelText: 'Email',
+                        prefixIcon: Icon(Icons.email_outlined),
+                        border: OutlineInputBorder()
+                      ),
+                    ),
+                    SizedBox(height: 20,),
+                    TextField(
+                      controller: _passwordController,
+                      obscureText: true,
+                      decoration: InputDecoration(
+                          labelText: 'Password',
+                          prefixIcon: Icon(Icons.lock_outline),
+                          border: OutlineInputBorder()
+                      ),
+                    ),
+                    SizedBox(height: 20,),
+                    SizedBox(
+                      height: 50,
+                      width: double.infinity,
+                      child: ElevatedButton(onPressed: (){
+                        _login();
+                      }
+                      , child: Text('Login'),
+                        style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.pinkAccent,
+                            foregroundColor: Colors.white),
+                      ),
+                    ),
+                    TextButton(onPressed: (){
+                      AwesomeDialog(
+                          context: context,
+                          dialogType: DialogType.info,
+                          animType: AnimType.rightSlide,
+                          title: 'Dialog Title',
+                          desc: 'Dialog description here.............',
+                          btnCancelOnPress: () {},
+                      btnOkOnPress: () {},
+                      )..show();
+                    },
+                        child: Text('Forgot Password')
+                    )
+                ]
+                ),
+              ),
+            ),
+                  ),
+          Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Dont have an account?'),
+                TextButton(onPressed: (){
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context)=>SignUpScreenHome()));
+                }, child: Text('Sign up here.'))
+              ],
+          ),
+
+                ],
+              ),
+            ),
+    );
+
+  }
+}
