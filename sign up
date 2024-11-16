@@ -1,0 +1,157 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:flutter/material.dart';
+import 'package:timbolrm_b3/dashboard.dart';
+import 'package:timbolrm_b3/databse_helper.dart';
+import 'package:timbolrm_b3/loginscreen.dart';
+
+class SignUpScreen extends StatelessWidget{
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: SignUpScreenHome(),
+    );
+  }
+}
+
+class SignUpScreenHome extends StatefulWidget{
+  @override
+  State<SignUpScreenHome> createState() => _SignUpScreenHomeState();
+}
+
+class _SignUpScreenHomeState extends State<SignUpScreenHome> {
+  var _fulnameController = TextEditingController();
+  var _emailController = TextEditingController();
+  var _passwordController = TextEditingController();
+  var _cpasswordController = TextEditingController();
+
+  void _signup()async{
+    var fullname = _fulnameController.text.trim();
+    var email = _emailController.text.trim();
+    var pass = _passwordController.text.trim();
+    var cpass = _cpasswordController.text.trim();
+
+    if(fullname.isEmpty || email.isEmpty || pass.isEmpty || cpass.isEmpty){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Please provide input in all fields!'))
+      );
+    }else if(pass!=cpass){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Password and Confirm password does not match'))
+      );
+    }else{
+      bool EmailExist = await DatabaseHelper.instance.emailExist(email);
+      if(EmailExist){
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('The email is already Registered, please try again'))
+        );
+      }else{
+        Map<String,dynamic> user={
+          'fullname': fullname,
+          'email': email,
+          'password': pass
+        };
+        await DatabaseHelper.instance.insertUser(user);
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Account Successfully Ceated!'))
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('SignUp Page'),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Text('SIGN UP PAGE'),
+            SizedBox(height: 20),
+            Text('Please sign up to continue'),
+            SizedBox(height: 20),
+            SizedBox(
+              height:  MediaQuery.of(context).size.height*0.65,
+              width: MediaQuery.of(context).size.width*0.3,
+            child: Card(
+    elevation: 10,
+    child: Padding(
+    padding: const EdgeInsets.all(15.0),
+    child: Column(
+    children: [
+      Text('SIGN UP', style: TextStyle(fontSize: 20, color: Colors.pinkAccent)),
+    SizedBox(height: 20),
+            TextField(
+            controller: _fulnameController,
+            decoration: InputDecoration(
+                labelText: 'Username',
+                prefixIcon: Icon(Icons.person),
+                border: OutlineInputBorder()
+            ),
+          ),
+          SizedBox(height: 20,),
+          TextField(
+               controller: _emailController,
+            decoration: InputDecoration(
+                labelText: 'Email',
+                prefixIcon: Icon(Icons.email),
+                border: OutlineInputBorder()
+            ),
+          ),
+                      SizedBox(height: 20,),
+                      TextField(
+                        controller: _passwordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                            labelText: 'Password',
+                            prefixIcon: Icon(Icons.lock),
+                            border: OutlineInputBorder(),
+                        ),
+                      ),
+                      SizedBox(height: 20,),
+                      TextField(
+                        controller: _cpasswordController,
+                        obscureText: true,
+                        decoration: InputDecoration(
+                          labelText: 'Confirm Password',
+                          prefixIcon: Icon(Icons.lock),
+                          border: OutlineInputBorder(),
+                        ),
+                      ),
+                      SizedBox(height: 20,),
+                      SizedBox(
+                        height: 50,
+                        width: double.infinity,
+                        child: ElevatedButton(onPressed: (){
+                          _signup();
+                          }, child: Text('Create Account'),
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: Colors.pinkAccent,
+                              foregroundColor: Colors.white),
+                        ),
+                      ),
+                    ]
+                ),
+              ),
+    ),
+    ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text('Already have an account?'),
+                TextButton(onPressed: (){
+                  Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context)=>LoginScreen()));
+                }, child: Text('Login here.'))
+
+              ],
+            ),
+  ]
+    ),
+    ),
+    );
+
+
+  }
+}
