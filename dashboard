@@ -1,0 +1,128 @@
+import 'package:flutter/material.dart';
+import 'package:timbolrm_b3/databse_helper.dart';
+import 'package:timbolrm_b3/globals.dart';
+import 'package:timbolrm_b3/loginscreen.dart';
+
+class Dashboard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: DashboardHome(),
+    );
+  }
+}
+
+class DashboardHome extends StatefulWidget {
+  @override
+  State<DashboardHome> createState() => _DashboardHomeState();
+}
+
+class _DashboardHomeState extends State<DashboardHome> {
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUser();
+  }
+  int? userId = getUserId();
+  String fullname = '';
+  String email = '';
+
+  void _loadUser()async{
+    if(userId!=null){
+      var userData = await DatabaseHelper.instance.getUserDetails(userId!);
+      if(userData!=null){
+        setState(() {
+          fullname = userData['fullname'];
+          email = userData['email'];
+        });
+      }
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      drawer: Drawer(
+        child: ListView(
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height*0.30,
+              child: DrawerHeader(child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 60,
+                  ),
+                  Text('$fullname', style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text('$email',style: TextStyle(color: Colors.pinkAccent[500],fontWeight: FontWeight.bold),),
+                ],
+              )),
+            ),
+            ListTile(
+              title: Text('Logout'),
+              leading: Icon(Icons.power_settings_new),
+              onTap: (){
+                Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>LoginScreen()));
+              },
+            )
+          ],
+        ),
+      ),
+      appBar: AppBar(
+        toolbarHeight: 80.0,
+        backgroundColor: Colors.pinkAccent,
+        flexibleSpace: Center(
+          child: Text(
+            'Welcome to Dashboard',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: Colors.black,
+            ),
+          ),
+        ),
+      ),
+      body: Center(
+        child: Card(
+          color: Colors.white,
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircleAvatar(
+                  radius: 50,
+                  backgroundImage: NetworkImage(
+                    'https://64.media.tumblr.com/81837f1dcf85757608887091f901190e/6f2bd0a8f7d34418-bc/s400x600/7613f22dd7fc33ae72a57c88a4c6ec2cb8616586.pnj',
+                  ),
+                ),
+                SizedBox(height: 20),
+                Text('Timbol, Rosemarie C.'),
+                Text('Bachelor of Science in Information Technology'),
+                SizedBox(height: 20),
+                Wrap(
+                  spacing: 8.0,
+                  alignment: WrapAlignment.center,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () {
+                        print('Add me');
+                      },
+                      child: Text('Add'),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        print('Follow me');
+                      },
+                      child: Text('Follow'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
