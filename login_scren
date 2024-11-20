@@ -1,0 +1,182 @@
+import 'package:flutter/material.dart';
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'database_helper.dart'; // Adjust import to your database helper
+import 'dashboard.dart'; // Adjust import to your dashboard
+import 'globals.dart';
+import 'signup_screen.dart'; // Adjust import to your signup screen
+import 'package:flutter_svg/flutter_svg.dart'; // For icons (Optional, you can use any method for icons)
+
+class LoginScreen extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: LoginScreenHome(),
+    );
+  }
+}
+
+class LoginScreenHome extends StatefulWidget {
+  @override
+  State<LoginScreenHome> createState() => _LoginScreenHomeState();
+}
+
+class _LoginScreenHomeState extends State<LoginScreenHome> {
+  var _emailController = TextEditingController();
+  var _passwordController = TextEditingController();
+
+  // Login method
+  void _login() async {
+    var email = _emailController.text.trim();
+    var password = _passwordController.text.trim();
+
+    if (email.isEmpty || password.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please provide input in all fields')),
+      );
+    } else {
+      int? userId = await DatabaseHelper.instance.userLogin(email, password);
+      if (userId != null) {
+        setUserId(userId);
+        Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => Dashboard()));
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Login Failed, please try again!')),
+        );
+      }
+    }
+  }
+
+  // Google login method (Placeholder)
+  void _googleLogin() {
+    // Integrate Google login logic here
+    print("Google Login Initiated");
+    // Navigate to Dashboard on success (for example)
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => Dashboard()));
+  }
+
+  // Facebook login method (Placeholder)
+  void _facebookLogin() {
+    // Integrate Facebook login logic here
+    print("Facebook Login Initiated");
+    // Navigate to Dashboard on success (for example)
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => Dashboard()));
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('ShopMate - Login'),
+        backgroundColor: Colors.deepPurpleAccent, // Shopping app theme color
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: 50),
+            Text(
+              'Welcome to ShopMate!',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 22, color: Colors.deepPurpleAccent),
+            ),
+            SizedBox(height: 20),
+            Text('Please login to start shopping', style: TextStyle(fontSize: 16)),
+            SizedBox(height: 30),
+            // Logo Section
+            SvgPicture.asset(
+              'assets/shopmate_logo.svg', // Assuming you use SVG for your logo
+              height: 100,
+              width: 100,
+            ),
+            SizedBox(height: 30),
+            // Email Input
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                controller: _emailController,
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  prefixIcon: Icon(Icons.email_outlined),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            // Password Input
+            Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: TextField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: InputDecoration(
+                  labelText: 'Password',
+                  prefixIcon: Icon(Icons.lock_outline),
+                  border: OutlineInputBorder(),
+                ),
+              ),
+            ),
+            SizedBox(height: 20),
+            // Login Button
+            SizedBox(
+              height: 50,
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: _login,
+                child: Text('Login'),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.deepPurpleAccent),
+              ),
+            ),
+            SizedBox(height: 20),
+            // Social Media Login Buttons (Google and Facebook)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton.icon(
+                  onPressed: _googleLogin,
+                  icon: Icon(Icons.golf_course, color: Colors.white),
+                  label: Text('Login with Google'),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
+                ),
+                SizedBox(width: 10),
+                ElevatedButton.icon(
+                  onPressed: _facebookLogin,
+                  icon: Icon(Icons.facebook, color: Colors.white),
+                  label: Text('Login with Facebook'),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.blueAccent),
+                ),
+              ],
+            ),
+            SizedBox(height: 10),
+            // Forgot Password
+            TextButton(
+              onPressed: () {
+                AwesomeDialog(
+                  context: context,
+                  dialogType: DialogType.info,
+                  animType: AnimType.rightSlide,
+                  title: 'Forgot Password?',
+                  desc: 'Please follow the instructions sent to your email.',
+                  btnCancelOnPress: () {},
+                  btnOkOnPress: () {},
+                )..show();
+              },
+              child: Text('Forgot Password?'),
+            ),
+            SizedBox(height: 20),
+            // Sign-up Button
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Text("Don't have an account? "),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (BuildContext context) => SignUpScreenHome()));
+                  },
+                  child: Text('Sign up here.'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
