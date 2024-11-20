@@ -1,0 +1,102 @@
+import 'package:flutter/material.dart';
+import 'login_screen.dart'; // Adjust import as per your app structure
+import 'globals.dart'; // For managing user-specific data
+
+class Dashboard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: DashboardHome(),
+    );
+  }
+}
+
+class DashboardHome extends StatefulWidget {
+  @override
+  _DashboardHomeState createState() => _DashboardHomeState();
+}
+
+class _DashboardHomeState extends State<DashboardHome> {
+  String userName = "User"; // You can fetch this from your database or user data
+
+  // Log out function (clears user session)
+  void _logOut() {
+    // Reset user session here (clear userId, etc.)
+    setUserId(null);  // Assuming setUserId is used for managing logged-in state
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreen()), // Navigate to Login
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text("Dashboard"),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.exit_to_app),
+            onPressed: _logOut,
+          ),
+        ],
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Welcome, $userName!',
+              style: TextStyle(
+                fontSize: 24,
+                fontWeight: FontWeight.bold,
+                color: Colors.pinkAccent,
+              ),
+            ),
+            SizedBox(height: 20),
+            Text(
+              'Here are your options:',
+              style: TextStyle(fontSize: 18),
+            ),
+            SizedBox(height: 20),
+            // Example of different navigation options
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to another screen or section
+              },
+              child: Text("View Profile"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.pinkAccent,
+                foregroundColor: Colors.white,
+              ),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to another screen or section
+              },
+              child: Text("View Orders"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.pinkAccent,
+                foregroundColor: Colors.white,
+              ),
+            ),
+            SizedBox(height: 10),
+            ElevatedButton(
+              onPressed: () {
+                // Navigate to another screen or section
+              },
+              child: Text("Shop Now"),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.pinkAccent,
+                foregroundColor: Colors.white,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
