@@ -1,0 +1,94 @@
+import 'package:path/path.dart';
+import 'package:sqflite/sqflite.dart';
+
+class DatabaseHelper {
+  // Private constructor for singleton pattern
+  DatabaseHelper._privateConstructor();
+
+  static final DatabaseHelper instance = DatabaseHelper._privateConstructor();
+  static Database? _database;
+
+  // Lazy loading of the database instance
+  Future<Database> get database async {
+    if (_database != null) {
+      return _database!;
+    } else {
+      _database = await _initDb('mydb.db');
+      return _database!;
+    }
+  }
+
+  // Initialize database and create tables
+  Future<Database> _initDb(String dbName) async {
+    final dbDir = await getDatabasesPath();
+    final path = join(dbDir, dbName);
+
+    return await openDatabase(
+      path,
+      version: 1,
+      onCreate: (Database db, int ver) {
+        db.execute(
+            '''
+          CREATE TABLE 'users'(
+          'id' INTEGER PRIMARY KEY AUTOINCREMENT,
+          'fullname' TEXT NOT NULL,
+          'email' TEXT NOT NULL,
+          'password' TEXT NOT NULL
+          )
+          '''
+        );
+      },
+    );
+  }
+
+  // Insert new user into the 'users' table
+  Future<int> insertUser(Map<String, dynamic> user) async {
+    Database db = await instance.database;
+    return await db.insert('users', user);
+  }
+
+  // Check if the email already exists in the database
+  Future<bool> emailExist(String email) async {
+    Database db = await instance.database;
+    List<Map<String, dynamic>> result = await db.query(
+      'users',
+      where: 'email = ?',
+      whereArgs: [email],
+    );
+    return result.isNotEmpty;
+  }
+
+  // Login function: checks if user exists with the given email and password
+  Future<int?> userLogin(String email, String password) async {
+    Database db = await instance.database;
+    List<Map<String, dynamic>> result = await db.query(
+      'users',
+      where: 'email = ? AND password = ?',
+      whereArgs: [email, password],
+    );
+
+    if (result.isNotEmpty) {
+      // Return the user's ID if found
+      return result.first['id'] as int;
+    } else {
+      // Return null if no matching user is found
+      return null;
+    }
+  }
+
+  // Get user details by user ID
+  Future<Map<String, dynamic>?> getUserDetails(int userId) async {
+    Database db = await instance.database;
+    List<Map<String, dynamic>> result = await db.query(
+      'users',
+      where: 'id = ?',
+      whereArgs: [userId],
+    );
+
+    if (result.isNotEmpty) {
+      return result.first;
+    } else {
+      return null;
+    }
+  }
+}
