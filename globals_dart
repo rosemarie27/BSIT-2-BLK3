@@ -1,0 +1,11 @@
+int? currentUserId;  // Nullable user ID
+
+// Set the user ID to a nullable value
+void setUserId(int? userId) {
+  currentUserId = userId;  // Nullable value assignment
+}
+
+// Get the user ID (nullable)
+int? getUserId() {
+  return currentUserId;  // Returns nullable user ID
+}
