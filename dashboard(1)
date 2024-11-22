@@ -1,0 +1,146 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:flutter/material.dart';
+import 'package:timbolrm_b3/database_helper.dart';
+import 'package:timbolrm_b3/globals.dart';
+import 'package:timbolrm_b3/loginscreen.dart';
+import 'package:timbolrm_b3/update_profile.dart';
+
+class Dashboard extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: DashboardHome(),
+    );
+  }
+}
+
+class DashboardHome extends StatefulWidget {
+  @override
+  State<DashboardHome> createState() => _DashboardHomeState();
+}
+
+class _DashboardHomeState extends State<DashboardHome> {
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUser();
+  }
+  int? userId = getUserId();
+  String fullname = '';
+  String email = '';
+  String password = '';
+
+  void _loadUser()async{
+    if(userId!=null){
+      var userData = await DatabaseHelper.instance.getUserDetails(userId!);
+      if(userData!=null){
+        setState(() {
+          fullname = userData['fullname'];
+          email = userData['email'];
+        });
+      }
+    }
+  }
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+      child: Scaffold(
+      drawer: Drawer(
+        child: ListView(
+        padding: EdgeInsets.zero,
+          children: [
+            SizedBox(
+              height: MediaQuery.of(context).size.height*0.30,
+              child: DrawerHeader(
+                decoration: BoxDecoration(
+                  color: Colors.pinkAccent
+                ),
+                child: Column(
+                children: [
+                  CircleAvatar(
+                    radius: 60,
+                    backgroundImage: AssetImage('assets/logo/logo.png'),
+                  ),
+                  Text('$fullname', style: TextStyle(fontWeight: FontWeight.bold),),
+                  Text('$email',style: TextStyle(fontSize: 17, color: Colors.pinkAccent[500],fontWeight: FontWeight.bold),),
+                ],
+              )),
+            ),
+            ListTile(
+            title: Text('Profile'),
+            leading: Icon(Icons.person),
+            onTap: ()async{
+             var updateData= await Navigator.of(context).push(MaterialPageRoute(builder: (BuildContext context)=>UpdateProfile(
+              currentEmail: email,
+              currentFullname: fullname,
+              currentPassword: password,
+            )));
+             if(updateData!=null){
+               setState(() {
+                 fullname = updateData['fullname'];
+                 password = updateData['password'];
+               });
+             }
+            },
+            ),
+            ListTile(
+              title: Text('Logout'),
+              leading: Icon(Icons.power_settings_new),
+              onTap: () {
+                AwesomeDialog(
+                    context: context,
+                    dialogType: DialogType.warning,
+                    title: 'Warning!',
+                    desc: 'Do you really want to logout?',
+                    btnOkOnPress: () {
+                      Navigator.of(context).push(MaterialPageRoute(
+                          builder: (BuildContext context) => LoginScreen()));
+                    },
+                    btnCancelOnPress: () {
+                      Navigator.of(context).pop();
+                    }
+                ).show();
+              },
+            ),
+          ],
+        ),
+      ),
+      appBar: AppBar(
+        title: Text('DASHBOARD'),
+        centerTitle: true,
+        backgroundColor: Colors.pinkAccent,
+      ),
+      body: Center(
+        child: Card(
+          color: Colors.white,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                CircleAvatar(
+                  backgroundImage: NetworkImage(
+                    'https://64.media.tumblr.com/81837f1dcf85757608887091f901190e/6f2bd0a8f7d34418-bc/s400x600/7613f22dd7fc33ae72a57c88a4c6ec2cb8616586.pnj'),
+                    radius: 50,
+                  ),
+                Text('Welcome $fullname'),
+                Text('Bachelor of Science in Information Technology'),
+               Row(
+                 mainAxisSize: MainAxisSize.min,
+                 children: [
+                   ElevatedButton(onPressed: (){},
+                       child: Text('Add')
+                   ),
+                   ElevatedButton(onPressed: (){},
+                     child: Text('Follow')
+                   )
+                 ],
+               )
+                  ],
+                ),
+            ),
+          ),
+        ),
+      );
+  }
+}
