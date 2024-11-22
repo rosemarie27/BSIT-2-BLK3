@@ -1,0 +1,136 @@
+import 'package:flutter/material.dart';
+import 'package:timbolrm_b3/database_helper.dart';
+import 'package:timbolrm_b3/globals.dart';
+
+
+class UpdateProfile extends StatefulWidget{
+  final String currentEmail;
+  final String currentFullname;
+  final String currentPassword;
+
+  UpdateProfile({
+    required this.currentEmail,
+    required this.currentFullname,
+    required this.currentPassword
+});
+
+  @override
+  State<UpdateProfile> createState() => _UpdateProfileState();
+}
+
+class _UpdateProfileState extends State<UpdateProfile> {
+  late var _fullnameController;
+  late var _passwordController;
+  bool passwordHidden = true;
+
+  void initState(){
+    super.initState();
+    _fullnameController = TextEditingController(text: widget.currentFullname);
+    _passwordController = TextEditingController(text: widget.currentPassword);
+  }
+
+  void updateUser()async{
+    String fullname = _fullnameController.text.trim();
+    String password = _passwordController.text.trim();
+
+    if(fullname.isEmpty || password.isEmpty){
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Please provide input in all fields!'))
+      );
+    }else{
+      int? userId = getUserId();
+      Map<String,dynamic> userData ={
+        'fullname': fullname,
+        'password': password
+      };
+      var result = await DatabaseHelper.instance.updateUser(userId!, userData);
+
+      if(result > 0){
+        Navigator.of(context).pop({'fullname': fullname, 'password': password});
+      }else{
+        ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('Update Failed, Please try again!'))
+        );
+      }
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return SafeArea(
+        child: Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.pinkAccent,
+            title: Text('Update Profile'),
+          ),
+          body: SingleChildScrollView(
+            child: Padding(
+              padding: const EdgeInsets.all(25.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: Container(
+                      padding: EdgeInsets.all(5),
+                      decoration: BoxDecoration(
+                        border: Border.all(
+                          color: Colors.white,
+                          width: 2
+                        ),
+                        shape: BoxShape.circle
+                      ),
+                      child: CircleAvatar(
+                        backgroundImage: AssetImage('assests/logo.png'),
+                        radius: 60,
+                      ),
+                    ),
+                  ),
+                  SizedBox(height: 16),
+                  Text(
+                    'Email',
+                    style: TextStyle(fontSize: 16),
+                  ),
+                  SizedBox(height: 8),
+                  Text(
+                    widget.currentEmail,
+                    style: TextStyle(fontSize: 16, color: Colors.black87),
+                  ),
+                  Divider(color: Colors.black87, thickness: 1),
+                  SizedBox(height: 16),
+                  TextField(
+                    controller: _fullnameController,
+                    decoration: InputDecoration(labelText: 'Full Name'),
+                    ),
+                  SizedBox(height: 16),
+                  TextField(
+                    obscureText: passwordHidden,
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      labelText: 'Password',
+                    suffixIcon: IconButton(onPressed: (){
+                      setState(() {
+                        passwordHidden = !passwordHidden;
+                      });
+                    }, icon: Icon(
+                      passwordHidden ? Icons.visibility:Icons.visibility_off
+                    ))
+
+                    ),
+                  ),
+                  SizedBox(height: 32),
+                  Center(
+                    child: ElevatedButton(
+                      onPressed: (){
+                        updateUser();
+                      },
+                      child: Text('Save Changes', style: TextStyle(color: Colors.black87),),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+    );
+  }
+}
